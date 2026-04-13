@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CitaCoin — Center Concepts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#030712; display:flex; flex-direction:column; align-items:center; min-height:100vh; font-family:'Plus Jakarta Sans',sans-serif; padding:48px 24px; gap:48px; }
+    h1 { color:#fbbf24; font-size:12px; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; }
+    .row { display:flex; gap:48px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
+    .concept { display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .concept-num { color:#f59e0b; font-size:10px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; }
+    .concept-name { color:#e2e8f0; font-size:14px; font-weight:800; }
+    .concept-desc { color:#6b7280; font-size:11px; text-align:center; max-width:160px; line-height:1.5; }
+    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+    .float { animation:float 3s ease-in-out infinite; filter: drop-shadow(0 0 18px rgba(251,191,36,0.45)) drop-shadow(0 0 50px rgba(245,158,11,0.2)); }
+    .shadow { width:180px; height:16px; background:radial-gradient(ellipse,rgba(245,158,11,0.18) 0%,transparent 70%); border-radius:50%; margin-top:-6px; }
+    svg { cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<h1>CitaCoin · Center Concepts — Pick Your OMG</h1>
+
+<div class="row">
+
+  <!-- CONCEPT 1: THE FORGE STAR — Crossed hammer + wrench forming 6-point star -->
+  <div class="concept">
+    <div class="concept-num">Option 1</div>
+    <div class="concept-name">The Forge Star</div>
+    <div class="float">
+      <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="base1" cx="38%" cy="32%" r="72%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="18%" stop-color="#fde68a"/>
+            <stop offset="48%" stop-color="#f59e0b"/>
+            <stop offset="78%" stop-color="#d97706"/>
+            <stop offset="100%" stop-color="#78350f"/>
+          </radialGradient>
+          <radialGradient id="field1" cx="38%" cy="32%" r="70%">
+            <stop offset="0%" stop-color="#fef9ee"/>
+            <stop offset="28%" stop-color="#fcd34d"/>
+            <stop offset="62%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+          <radialGradient id="mark1" cx="35%" cy="28%" r="68%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="35%" stop-color="#fde68a"/>
+            <stop offset="100%" stop-color="#7c2d12"/>
+          </radialGradient>
+          <linearGradient id="shine1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="45%" stop-color="rgba(255,255,255,0)"/>
+          </linearGradient>
+        </defs>
+        <!-- Rim -->
+        <circle cx="100" cy="100" r="97" fill="url(#base1)"/>
+        <!-- Body -->
+        <circle cx="100" cy="100" r="90" fill="url(#base1)"/>
+        <!-- Face -->
+        <circle cx="100" cy="100" r="83" fill="url(#field1)"/>
+        <!-- Milled edge -->
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.2" stroke-dasharray="2.5,3.2"/>
+        <!-- Inner ring -->
+        <circle cx="100" cy="100" r="76" fill="none" stroke="url(#mark1)" stroke-width="1.2" opacity="0.6"/>
+
+        <!-- FORGE STAR: 6-point radial sunburst from center -->
+        <g fill="url(#mark1)" opacity="0.92" transform="translate(100,100)">
+          <!-- 6 radiating spear tips -->
+          <polygon points="0,-38 6,-10 0,-5 -6,-10" opacity="0.95"/>
+          <polygon points="0,-38 6,-10 0,-5 -6,-10" transform="rotate(60)" opacity="0.95"/>
+          <polygon points="0,-38 6,-10 0,-5 -6,-10" transform="rotate(120)" opacity="0.95"/>
+          <polygon points="0,-38 6,-10 0,-5 -6,-10" transform="rotate(180)" opacity="0.95"/>
+          <polygon points="0,-38 6,-10 0,-5 -6,-10" transform="rotate(240)" opacity="0.95"/>
+          <polygon points="0,-38 6,-10 0,-5 -6,-10" transform="rotate(300)" opacity="0.95"/>
+          <!-- Star center fill -->
+          <circle cx="0" cy="0" r="12" fill="url(#mark1)" opacity="0.9"/>
+          <!-- HAMMER head top -->
+          <rect x="-14" y="-52" width="28" height="14" rx="3" fill="url(#mark1)" opacity="0.95"/>
+          <rect x="-4" y="-52" width="8" height="20" rx="2" fill="url(#mark1)" opacity="0.85"/>
+          <!-- WRENCH horizontal -->
+          <rect x="-56" y="-6" width="30" height="12" rx="3" fill="url(#mark1)" opacity="0.95"/>
+          <circle cx="-56" cy="0" r="10" fill="none" stroke="url(#mark1)" stroke-width="4" opacity="0.9"/>
+          <circle cx="-56" cy="0" r="5" fill="url(#mark1)" opacity="0.95"/>
+          <!-- WRENCH right -->
+          <rect x="26" y="-6" width="30" height="12" rx="3" fill="url(#mark1)" opacity="0.95"/>
+          <circle cx="56" cy="0" r="10" fill="none" stroke="url(#mark1)" stroke-width="4" opacity="0.9"/>
+          <circle cx="56" cy="0" r="5" fill="url(#mark1)" opacity="0.95"/>
+          <!-- BOLT bottom -->
+          <polygon points="0,24 8,40 0,52 -8,40" fill="url(#mark1)" opacity="0.95"/>
+          <rect x="-7" y="44" width="14" height="8" rx="2" fill="url(#mark1)" opacity="0.85"/>
+        </g>
+
+        <!-- Rim text -->
+        <path id="rt1" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" fill="none"/>
+        <text font-family="Plus Jakarta Sans,sans-serif" font-weight="700" font-size="6.8" letter-spacing="2.8" fill="url(#mark1)" opacity="0.82">
+          <textPath href="#rt1" startOffset="2%">CITACOIN · THE CURRENCY OF THE TRADES ·</textPath>
+        </text>
+
+        <!-- Highlight -->
+        <ellipse cx="70" cy="62" rx="34" ry="20" fill="url(#shine1)" transform="rotate(-35,70,62)" opacity="0.52"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="shadow"></div>
+    <div class="concept-desc">Hammer + wrench + bolt forming a 6-point star. Classic trade iconography, powerful symmetry.</div>
+  </div>
+
+  <!-- CONCEPT 2: THE COMPASS ROSE — Sacred geometry, precision drafting -->
+  <div class="concept">
+    <div class="concept-num">Option 2</div>
+    <div class="concept-name">The Compass Rose</div>
+    <div class="float" style="animation-delay:0.5s">
+      <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="base2" cx="38%" cy="32%" r="72%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="18%" stop-color="#fde68a"/>
+            <stop offset="48%" stop-color="#f59e0b"/>
+            <stop offset="78%" stop-color="#d97706"/>
+            <stop offset="100%" stop-color="#78350f"/>
+          </radialGradient>
+          <radialGradient id="field2" cx="38%" cy="32%" r="70%">
+            <stop offset="0%" stop-color="#fef9ee"/>
+            <stop offset="28%" stop-color="#fcd34d"/>
+            <stop offset="62%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+          <radialGradient id="mark2" cx="35%" cy="28%" r="68%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="35%" stop-color="#fde68a"/>
+            <stop offset="100%" stop-color="#7c2d12"/>
+          </radialGradient>
+          <linearGradient id="shine2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="45%" stop-color="rgba(255,255,255,0)"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="97" fill="url(#base2)"/>
+        <circle cx="100" cy="100" r="90" fill="url(#base2)"/>
+        <circle cx="100" cy="100" r="83" fill="url(#field2)"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.2" stroke-dasharray="2.5,3.2"/>
+        <circle cx="100" cy="100" r="76" fill="none" stroke="url(#mark2)" stroke-width="1" opacity="0.55"/>
+
+        <!-- COMPASS ROSE -->
+        <g transform="translate(100,100)" fill="url(#mark2)">
+          <!-- 8 major points — N/S/E/W large, diagonals small -->
+          <!-- North (large) -->
+          <polygon points="0,-50 7,-18 0,-12 -7,-18" opacity="0.95"/>
+          <!-- South (large) -->
+          <polygon points="0,50 7,18 0,12 -7,18" opacity="0.95"/>
+          <!-- East (large) -->
+          <polygon points="50,0 18,7 12,0 18,-7" opacity="0.95"/>
+          <!-- West (large) -->
+          <polygon points="-50,0 -18,7 -12,0 -18,-7" opacity="0.95"/>
+          <!-- NE -->
+          <polygon points="34,-34 11,-15 8,-8 15,-11" opacity="0.75"/>
+          <!-- SE -->
+          <polygon points="34,34 11,15 8,8 15,11" opacity="0.75"/>
+          <!-- SW -->
+          <polygon points="-34,34 -11,15 -8,8 -15,11" opacity="0.75"/>
+          <!-- NW -->
+          <polygon points="-34,-34 -11,-15 -8,-8 -15,-11" opacity="0.75"/>
+          <!-- Inner decorative ring -->
+          <circle cx="0" cy="0" r="16" fill="none" stroke="url(#mark2)" stroke-width="1.5" opacity="0.8"/>
+          <circle cx="0" cy="0" r="10" fill="none" stroke="url(#mark2)" stroke-width="1" opacity="0.6"/>
+          <!-- Center jewel -->
+          <circle cx="0" cy="0" r="5" fill="url(#mark2)" opacity="0.95"/>
+          <!-- Outer construction circle -->
+          <circle cx="0" cy="0" r="28" fill="none" stroke="url(#mark2)" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.45"/>
+          <!-- C lettering on compass -->
+          <text x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="900" font-size="9" fill="url(#mark2)" opacity="0.9" letter-spacing="0">◈</text>
+        </g>
+
+        <!-- Rim text -->
+        <path id="rt2" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" fill="none"/>
+        <text font-family="Plus Jakarta Sans,sans-serif" font-weight="700" font-size="6.8" letter-spacing="2.8" fill="url(#mark2)" opacity="0.82">
+          <textPath href="#rt2" startOffset="2%">CITACOIN · THE CURRENCY OF THE TRADES ·</textPath>
+        </text>
+        <ellipse cx="70" cy="62" rx="34" ry="20" fill="url(#shine2)" transform="rotate(-35,70,62)" opacity="0.52"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="shadow"></div>
+    <div class="concept-desc">8-point compass rose — precision, navigation, "built for those who know where they're going."</div>
+  </div>
+
+  <!-- CONCEPT 3: THE GEAR CROWN — Industry meets royalty -->
+  <div class="concept">
+    <div class="concept-num">Option 3</div>
+    <div class="concept-name">The Gear Crown</div>
+    <div class="float" style="animation-delay:1s">
+      <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="base3" cx="38%" cy="32%" r="72%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="18%" stop-color="#fde68a"/>
+            <stop offset="48%" stop-color="#f59e0b"/>
+            <stop offset="78%" stop-color="#d97706"/>
+            <stop offset="100%" stop-color="#78350f"/>
+          </radialGradient>
+          <radialGradient id="field3" cx="38%" cy="32%" r="70%">
+            <stop offset="0%" stop-color="#fef9ee"/>
+            <stop offset="28%" stop-color="#fcd34d"/>
+            <stop offset="62%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+          <radialGradient id="mark3" cx="35%" cy="28%" r="68%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="35%" stop-color="#fde68a"/>
+            <stop offset="100%" stop-color="#7c2d12"/>
+          </radialGradient>
+          <linearGradient id="shine3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="45%" stop-color="rgba(255,255,255,0)"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="97" fill="url(#base3)"/>
+        <circle cx="100" cy="100" r="90" fill="url(#base3)"/>
+        <circle cx="100" cy="100" r="83" fill="url(#field3)"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.2" stroke-dasharray="2.5,3.2"/>
+
+        <!-- GEAR (12 teeth) -->
+        <g transform="translate(100,100)" fill="url(#mark3)" opacity="0.92">
+          <!-- Gear teeth (12 rectangles rotated) -->
+          <rect x="-5" y="-52" width="10" height="14" rx="2"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(30)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(60)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(90)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(120)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(150)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(180)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(210)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(240)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(270)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(300)"/>
+          <rect x="-5" y="-52" width="10" height="14" rx="2" transform="rotate(330)"/>
+          <!-- Gear body ring -->
+          <circle cx="0" cy="0" r="40" fill="url(#mark3)" opacity="0.2"/>
+          <circle cx="0" cy="0" r="40" fill="none" stroke="url(#mark3)" stroke-width="12" opacity="0.88"/>
+          <!-- Inner hole -->
+          <circle cx="0" cy="0" r="18" fill="url(#field3)"/>
+          <circle cx="0" cy="0" r="18" fill="none" stroke="url(#mark3)" stroke-width="1.5" opacity="0.8"/>
+          <!-- CROWN points inside hole -->
+          <polygon points="0,-14 4,-8 8,-14 12,-8 14,-2 -14,-2 -12,-8 -8,-14 -4,-8" fill="url(#mark3)" opacity="0.9"/>
+          <rect x="-14" y="-2" width="28" height="8" rx="1" fill="url(#mark3)" opacity="0.9"/>
+          <!-- Center dot -->
+          <circle cx="0" cy="0" r="4" fill="url(#mark3)" opacity="0.95"/>
+        </g>
+
+        <!-- Rim text -->
+        <path id="rt3" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" fill="none"/>
+        <text font-family="Plus Jakarta Sans,sans-serif" font-weight="700" font-size="6.8" letter-spacing="2.8" fill="url(#mark3)" opacity="0.82">
+          <textPath href="#rt3" startOffset="2%">CITACOIN · THE CURRENCY OF THE TRADES ·</textPath>
+        </text>
+        <ellipse cx="70" cy="62" rx="34" ry="20" fill="url(#shine3)" transform="rotate(-35,70,62)" opacity="0.52"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="shadow"></div>
+    <div class="concept-desc">Gear with a crown inside — industry + royalty. You run the trades, you wear the crown.</div>
+  </div>
+
+  <!-- CONCEPT 4: THE DIAMOND CITAMARK — Geometric ◈ blown up, sacred geometry -->
+  <div class="concept">
+    <div class="concept-num">Option 4</div>
+    <div class="concept-name">The CitaMark</div>
+    <div class="float" style="animation-delay:1.5s">
+      <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="base4" cx="38%" cy="32%" r="72%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="18%" stop-color="#fde68a"/>
+            <stop offset="48%" stop-color="#f59e0b"/>
+            <stop offset="78%" stop-color="#d97706"/>
+            <stop offset="100%" stop-color="#78350f"/>
+          </radialGradient>
+          <radialGradient id="field4" cx="38%" cy="32%" r="70%">
+            <stop offset="0%" stop-color="#fef9ee"/>
+            <stop offset="28%" stop-color="#fcd34d"/>
+            <stop offset="62%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+          <radialGradient id="mark4" cx="35%" cy="28%" r="68%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="35%" stop-color="#fde68a"/>
+            <stop offset="100%" stop-color="#7c2d12"/>
+          </radialGradient>
+          <linearGradient id="shine4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="45%" stop-color="rgba(255,255,255,0)"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="97" fill="url(#base4)"/>
+        <circle cx="100" cy="100" r="90" fill="url(#base4)"/>
+        <circle cx="100" cy="100" r="83" fill="url(#field4)"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.2" stroke-dasharray="2.5,3.2"/>
+
+        <!-- CITAMARK: Bold ◈ as sacred geometry -->
+        <g transform="translate(100,100)" stroke="url(#mark4)" fill="none">
+          <!-- Outer circle construction ring -->
+          <circle cx="0" cy="0" r="44" stroke-width="1" opacity="0.4" stroke-dasharray="2,3"/>
+          <!-- Outer hexagon -->
+          <polygon points="0,-44 38,-22 38,22 0,44 -38,22 -38,-22" stroke-width="2.5" opacity="0.9" stroke-linejoin="round"/>
+          <!-- Rotated inner hexagon -->
+          <polygon points="22,-38 44,0 22,38 -22,38 -44,0 -22,-38" stroke-width="1.5" opacity="0.5" stroke-linejoin="round"/>
+          <!-- Square rotated 45 — the diamond -->
+          <rect x="-28" y="-28" width="56" height="56" stroke-width="2.8" opacity="0.92" transform="rotate(0)"/>
+          <rect x="-28" y="-28" width="56" height="56" stroke-width="1.5" opacity="0.55" transform="rotate(45)"/>
+          <!-- Inner circle -->
+          <circle cx="0" cy="0" r="18" stroke-width="2" opacity="0.85"/>
+          <!-- Center fill -->
+          <circle cx="0" cy="0" r="7" fill="url(#mark4)" stroke="none" opacity="0.95"/>
+          <!-- 4 corner dots at diamond vertices -->
+          <circle cx="0" cy="-28" r="3" fill="url(#mark4)" stroke="none" opacity="0.9"/>
+          <circle cx="28" cy="0" r="3" fill="url(#mark4)" stroke="none" opacity="0.9"/>
+          <circle cx="0" cy="28" r="3" fill="url(#mark4)" stroke="none" opacity="0.9"/>
+          <circle cx="-28" cy="0" r="3" fill="url(#mark4)" stroke="none" opacity="0.9"/>
+          <!-- 4 midpoint tick marks on hex -->
+          <line x1="0" y1="-44" x2="0" y2="-36" stroke-width="2.5" opacity="0.85"/>
+          <line x1="44" y1="0" x2="36" y2="0" stroke-width="2.5" opacity="0.85"/>
+          <line x1="0" y1="44" x2="0" y2="36" stroke-width="2.5" opacity="0.85"/>
+          <line x1="-44" y1="0" x2="-36" y2="0" stroke-width="2.5" opacity="0.85"/>
+        </g>
+
+        <!-- Rim text -->
+        <path id="rt4" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" fill="none"/>
+        <text font-family="Plus Jakarta Sans,sans-serif" font-weight="700" font-size="6.8" letter-spacing="2.8" fill="url(#mark4)" opacity="0.82">
+          <textPath href="#rt4" startOffset="2%">CITACOIN · THE CURRENCY OF THE TRADES ·</textPath>
+        </text>
+        <ellipse cx="70" cy="62" rx="34" ry="20" fill="url(#shine4)" transform="rotate(-35,70,62)" opacity="0.52"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="shadow"></div>
+    <div class="concept-desc">Sacred geometry — overlapping hexagon + diamond + circle. Precision. The CitaMark as a standalone icon.</div>
+  </div>
+
+</div>
+
+<div style="color:#374151;font-size:11px;text-align:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:20px;max-width:600px;line-height:1.8;">
+  <span style="color:#fbbf24;">Pick 1, 2, 3, or 4</span> — or say "mix X and Y" and I'll combine them. Wording on all coins stays the same. <br/>
+  Once locked, I build the final master coin and swap it into citacoin.com.
+</div>
+
+</body>
+</html>
