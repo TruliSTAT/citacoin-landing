@@ -1027,18 +1027,48 @@ function closeLoginModal() {
 }
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLoginModal(); });
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     var btn = this.querySelector('button[type=submit]');
     var err = document.getElementById('loginError');
-    btn.textContent = 'Checking...';
+    var isEn = document.getElementById('btn-en').classList.contains('active');
+    var username = this.querySelector('input[type=text], input[name=username]').value.trim();
+    var password = this.querySelector('input[type=password]').value;
+    btn.textContent = isEn ? 'Checking...' : 'Verificando...';
     btn.disabled = true;
-    setTimeout(function() {
-      btn.textContent = document.getElementById('btn-en').classList.contains('active') ? 'Log In' : 'Iniciar Sesión';
+    err.style.display = 'none';
+    err.style.color = '#f87171';
+    try {
+      var res = await fetch('https://app.citapros.com/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, password: password })
+      });
+      var data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem('citacoin_token', data.token);
+        localStorage.setItem('citacoin_user', JSON.stringify(data.user || data.operator || {}));
+        var name = (data.user || data.operator || {}).name || (data.user || data.operator || {}).username || username;
+        err.style.color = '#34d399';
+        err.style.display = 'block';
+        err.textContent = '\u2705 Welcome back, ' + name + '! Redirecting to your wallet...';
+        setTimeout(function() { location.reload(); }, 1500);
+      } else if (res.status === 401) {
+        err.style.display = 'block';
+        err.textContent = isEn ? 'Invalid username or password.' : 'Usuario o contraseña incorrectos.';
+        btn.textContent = isEn ? 'Log In' : 'Iniciar Sesión';
+        btn.disabled = false;
+      } else {
+        throw new Error('bad_response');
+      }
+    } catch (ex) {
+      if (!err.style.display || err.style.display === 'none') {
+        err.style.display = 'block';
+        err.textContent = isEn ? 'Connection error — try again.' : 'Error de conexión — intenta de nuevo.';
+      }
+      btn.textContent = isEn ? 'Log In' : 'Iniciar Sesión';
       btn.disabled = false;
-      err.style.display = 'block';
-      err.textContent = 'Login coming soon — use the CitaPros app for now.';
-    }, 1200);
+    }
   });
 });
 </script>
