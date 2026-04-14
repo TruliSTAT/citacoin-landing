@@ -998,5 +998,180 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CITACOIN CHAT WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<style>
+  #cita-chat-bubble {
+    position: fixed; bottom: 24px; right: 20px; z-index: 9999;
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #D4A83A, #b8860b);
+    color: #000; padding: 10px 18px; border-radius: 50px;
+    cursor: pointer; font-family: 'Plus Jakarta Sans', Inter, sans-serif;
+    font-weight: 800; font-size: 0.9rem;
+    box-shadow: 0 4px 24px rgba(212,168,58,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+  }
+  #cita-chat-bubble:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(212,168,58,0.6); }
+  #cita-chat-bubble .cita-bubble-icon { font-size: 1.1rem; }
+
+  #cita-chat-panel {
+    position: fixed; bottom: 80px; right: 20px; z-index: 9998;
+    width: 340px; max-width: calc(100vw - 32px);
+    background: #0d1117; border: 1px solid rgba(10,186,181,0.3);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.7);
+    display: none; flex-direction: column;
+    transform: translateY(20px); opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  #cita-chat-panel.open { display: flex; transform: translateY(0); opacity: 1; }
+
+  .cita-panel-header {
+    background: linear-gradient(135deg, #0ABAB5, #07908c);
+    padding: 16px 18px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .cita-panel-header .cita-title { color: #000; font-weight: 800; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; gap: 8px; }
+  .cita-close-btn { background: none; border: none; color: rgba(0,0,0,0.6); font-size: 1.3rem; cursor: pointer; line-height: 1; }
+
+  .cita-messages {
+    flex: 1; padding: 16px; overflow-y: auto; max-height: 280px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .cita-msg { padding: 10px 14px; border-radius: 14px; font-size: 0.875rem; line-height: 1.55; max-width: 92%; }
+  .cita-msg.bot { background: rgba(255,255,255,0.06); color: #e2e8f0; align-self: flex-start; }
+  .cita-msg.user { background: rgba(10,186,181,0.18); color: #e2e8f0; align-self: flex-end; text-align: right; border: 1px solid rgba(10,186,181,0.3); }
+
+  .cita-quick-replies { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 7px; }
+  .cita-qr-btn {
+    background: rgba(212,168,58,0.1); border: 1px solid rgba(212,168,58,0.35);
+    color: #f5cc5a; padding: 9px 14px; border-radius: 10px;
+    font-size: 0.8rem; font-family: inherit; cursor: pointer;
+    text-align: left; transition: background 0.15s;
+    line-height: 1.3;
+  }
+  .cita-qr-btn:hover { background: rgba(212,168,58,0.2); }
+
+  .cita-input-row {
+    display: flex; gap: 8px; padding: 12px 14px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+  }
+  .cita-input {
+    flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 0.85rem; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .cita-input:focus { border-color: rgba(10,186,181,0.5); }
+  .cita-input::placeholder { color: rgba(255,255,255,0.3); }
+  .cita-send-btn {
+    background: #0ABAB5; border: none; border-radius: 10px;
+    color: #000; font-weight: 700; font-size: 0.8rem; padding: 9px 14px;
+    cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+  }
+  .cita-send-btn:hover { opacity: 0.85; }
+</style>
+
+<div id="cita-chat-bubble" onclick="citaToggleChat()">
+  <span class="cita-bubble-icon">🪙</span>
+  <span>Ask CitaCoin</span>
+</div>
+
+<div id="cita-chat-panel">
+  <div class="cita-panel-header">
+    <div class="cita-title"><span>🪙</span> CitaCoin Assistant</div>
+    <button class="cita-close-btn" onclick="citaToggleChat()" title="Close">✕</button>
+  </div>
+  <div class="cita-messages" id="cita-messages">
+    <div class="cita-msg bot">Hey! I'm the CitaCoin assistant. Ask me anything or tap a quick question below. 🪙</div>
+  </div>
+  <div class="cita-quick-replies" id="cita-quick-replies">
+    <button class="cita-qr-btn" onclick="citaQuickReply('earn')">How do I earn coins? / ¿Cómo gano monedas?</button>
+    <button class="cita-qr-btn" onclick="citaQuickReply('referral')">How does referral pay work? / ¿Cómo funciona el bono?</button>
+    <button class="cita-qr-btn" onclick="citaQuickReply('early')">Am I too late to be an early adopter? / ¿Soy adoptador temprano?</button>
+  </div>
+  <div class="cita-input-row">
+    <input class="cita-input" id="cita-input" type="text" placeholder="Ask a question..." onkeydown="if(event.key==='Enter')citaSend()">
+    <button class="cita-send-btn" onclick="citaSend()">Send</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var citaOpen = false;
+
+  function citaGetLang() {
+    return localStorage.getItem('cita_lang') || 'en';
+  }
+
+  window.citaToggleChat = function() {
+    citaOpen = !citaOpen;
+    var panel = document.getElementById('cita-chat-panel');
+    if (citaOpen) {
+      panel.style.display = 'flex';
+      setTimeout(function() { panel.classList.add('open'); }, 10);
+    } else {
+      panel.classList.remove('open');
+      setTimeout(function() { panel.style.display = 'none'; }, 260);
+    }
+  };
+
+  function citaAddMsg(text, type) {
+    var msgs = document.getElementById('cita-messages');
+    var div = document.createElement('div');
+    div.className = 'cita-msg ' + type;
+    div.textContent = text;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  var citaAnswers = {
+    earn: {
+      en: "Every job you complete in CitaPros earns you 10 coins. Get a 5-star rating? +5 more. Complete 1 job per week for 4 straight weeks and earn a 20-coin streak bonus. You can earn up to 500 coins/month — and spend them for plan credits, listing boosts, and more.",
+      es: "Cada trabajo que completes en CitaPros te da 10 monedas. ¿Recibes 5 estrellas? +5 más. Completa 1 trabajo por semana durante 4 semanas seguidas y gana un bono de racha de 20 monedas. Puedes ganar hasta 500 monedas al mes."
+    },
+    referral: {
+      en: "Refer another pro to CitaPros and earn 100 coins when they activate. Keep referring and you unlock cash override payments: 5 referrals = $25/mo, 10 = $100/mo, 25 = $375/mo, 50+ = $1,000+/mo. This is passive income for the life of their subscription.",
+      es: "Refiere a otro profesional a CitaPros y gana 100 monedas cuando activen. Sigue refiriendo y desbloqueas pagos en efectivo: 5 referidos = $25/mes, 10 = $100/mes, 25 = $375/mes, 50+ = $1,000+/mes. Ingreso pasivo de por vida."
+    },
+    early: {
+      en: "Not at all — you're early. Founder rates are still available. Early operators who refer and stay active build the biggest coin balances and earn the highest override tiers. The window won't be open forever. Start now at citapros.com.",
+      es: "Para nada — llegas temprano. Las tarifas de fundador aún están disponibles. Los operadores tempranos que refieren y se mantienen activos construyen los mayores saldos de monedas. La ventana no estará abierta para siempre."
+    }
+  };
+
+  var qLabels = {
+    earn: { en: "How do I earn coins?", es: "¿Cómo gano monedas?" },
+    referral: { en: "How does referral pay work?", es: "¿Cómo funciona el bono?" },
+    early: { en: "Am I too late to be an early adopter?", es: "¿Soy adoptador temprano?" }
+  };
+
+  window.citaQuickReply = function(key) {
+    var lang = citaGetLang();
+    citaAddMsg(qLabels[key][lang], 'user');
+    document.getElementById('cita-quick-replies').style.display = 'none';
+    setTimeout(function() { citaAddMsg(citaAnswers[key][lang], 'bot'); }, 400);
+  };
+
+  window.citaSend = function() {
+    var input = document.getElementById('cita-input');
+    var val = input.value.trim();
+    if (!val) return;
+    citaAddMsg(val, 'user');
+    input.value = '';
+    document.getElementById('cita-quick-replies').style.display = 'none';
+    setTimeout(function() {
+      var lang = citaGetLang();
+      var reply = lang === 'es'
+        ? "¡Buena pregunta! Nuestro equipo dará seguimiento en 24 horas. Responde INFO al [CITACOIN_PHONE] o visita citapros.com"
+        : "Great question! Our team will follow up within 24 hours. Reply INFO to [CITACOIN_PHONE] or visit citapros.com";
+      citaAddMsg(reply, 'bot');
+    }, 500);
+  };
+})();
+</script>
+
 </body>
 </html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CitaCoin Explainer — How It Works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #030712;
+      --surface: #0d1117;
+      --card: #111827;
+      --teal: #0ABAB5;
+      --teal-glow: rgba(10,186,181,0.18);
+      --gold: #D4A83A;
+      --gold-light: #F5CC5A;
+      --gold-glow: rgba(212,168,58,0.25);
+      --white: #FFFFFF;
+      --gray: #B0B8C1;
+      --border: rgba(255,255,255,0.07);
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+      background: rgba(3,7,18,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { font-size: 22px; }
+    .nav-logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; color: var(--gold); }
+    .lang-toggle { display: flex; gap: 4px; background: rgba(255,255,255,0.06); padding: 3px; border-radius: 20px; }
+    .lang-btn { padding: 4px 14px; border-radius: 16px; border: none; background: none; color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; letter-spacing: 0.06em; }
+    .lang-btn.active { background: var(--gold); color: #000; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar-wrap {
+      position: fixed; top: 57px; left: 0; right: 0; z-index: 99;
+      height: 3px; background: rgba(255,255,255,0.06);
+    }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--gold)); transition: width 0.4s ease; }
+
+    /* ── MAIN LAYOUT ── */
+    .slides-container { padding-top: 80px; }
+
+    /* ── SLIDE ── */
+    .slide {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 60px 24px 80px;
+      max-width: 900px; margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .slide:last-of-type { border-bottom: none; }
+
+    .slide-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid var(--teal);
+      color: var(--teal); font-weight: 800; font-size: 14px;
+      margin-bottom: 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .slide-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900; line-height: 1.1;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .slide-subtitle {
+      color: var(--teal); font-size: clamp(1rem, 2.5vw, 1.25rem);
+      font-weight: 600; margin-bottom: 32px;
+    }
+    .slide-body {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      line-height: 1.75; color: var(--gray);
+    }
+    .slide-body p { margin-bottom: 16px; }
+    .slide-body p:last-child { margin-bottom: 0; }
+    .slide-body strong { color: var(--white); }
+    .slide-body em { color: var(--gold); font-style: normal; font-weight: 600; }
+    .slide-body ul { list-style: none; padding: 0; margin: 16px 0; }
+    .slide-body ul li { padding: 6px 0 6px 24px; position: relative; }
+    .slide-body ul li::before { content: '▸'; color: var(--teal); position: absolute; left: 0; }
+
+    /* speaker note */
+    .speaker-note {
+      margin-top: 32px; padding: 16px 20px;
+      background: rgba(10,186,181,0.06); border-left: 3px solid var(--teal);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85rem; color: rgba(176,184,193,0.7); font-style: italic; line-height: 1.6;
+    }
+
+    /* table */
+    .slide-body table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; }
+    .slide-body th { color: var(--teal); font-weight: 700; text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(10,186,181,0.3); }
+    .slide-body td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--gray); }
+    .slide-body td:first-child { color: var(--white); }
+    .slide-body td strong { color: var(--gold); }
+
+    /* code / pre */
+    .slide-body pre {
+      background: #0a0f1e; border: 1px solid rgba(10,186,181,0.2);
+      border-radius: 10px; padding: 20px; margin: 16px 0;
+      font-size: 0.9rem; line-height: 1.7; overflow-x: auto;
+      color: #7dd3fc;
+    }
+
+    /* blockquote */
+    .slide-body blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 12px 20px; margin: 20px 0;
+      background: rgba(212,168,58,0.06); border-radius: 0 8px 8px 0;
+      color: var(--white); font-style: italic; font-size: 1.05rem;
+    }
+
+    /* highlight card */
+    .highlight-card {
+      background: var(--card); border: 1px solid rgba(212,168,58,0.25);
+      border-radius: 16px; padding: 28px 32px; margin: 24px 0;
+    }
+    .highlight-card .amount {
+      font-size: 3rem; font-weight: 900; color: var(--gold);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1; margin-bottom: 4px;
+    }
+    .highlight-card .label { color: var(--gray); font-size: 1rem; }
+
+    /* tier cards */
+    .tier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 24px 0; }
+    .tier-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; text-align: center;
+    }
+    .tier-card .tier-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .tier-card .tier-name { font-weight: 700; color: var(--white); font-size: 0.9rem; margin-bottom: 4px; }
+    .tier-card .tier-refs { color: var(--gray); font-size: 0.75rem; }
+    .tier-card .tier-pay { color: var(--gold); font-weight: 700; font-size: 0.85rem; margin-top: 6px; }
+
+    /* CTA section */
+    .cta-slide {
+      text-align: center; padding: 80px 24px;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(212,168,58,0.08) 0%, transparent 70%);
+    }
+    .cta-btn {
+      display: inline-block; padding: 16px 40px;
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      color: #000; font-weight: 800; font-size: 1.1rem;
+      border-radius: 50px; text-decoration: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      box-shadow: 0 0 40px rgba(212,168,58,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin: 16px 8px;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(212,168,58,0.6); }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      padding: 14px 24px;
+      background: rgba(3,7,18,0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+    }
+    .nav-btn {
+      padding: 10px 24px; border-radius: 30px;
+      border: 1px solid rgba(10,186,181,0.4); background: none;
+      color: var(--teal); font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+    }
+    .nav-btn:hover:not(:disabled) { background: rgba(10,186,181,0.12); border-color: var(--teal); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .nav-btn.primary { background: linear-gradient(135deg, var(--gold), #b8860b); color: #000; border-color: transparent; }
+    .nav-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 0 20px rgba(212,168,58,0.4); }
+    .slide-counter { color: var(--gray); font-size: 0.85rem; min-width: 70px; text-align: center; }
+
+    /* ── COVER HERO ── */
+    .cover-hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 24px 100px;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(212,168,58,0.08) 0%, transparent 60%);
+    }
+    .coin-hero { font-size: 6rem; margin-bottom: 20px; animation: float 4s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(212,168,58,0.5)); }
+    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
+    .cover-hero h1 { font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; color: var(--gold); letter-spacing: -0.03em; margin-bottom: 12px; }
+    .cover-hero .tagline { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--gray); font-weight: 500; margin-bottom: 8px; }
+    .cover-hero .url { color: var(--teal); font-weight: 700; font-size: 1rem; letter-spacing: 0.1em; margin-top: 24px; }
+
+    /* ── FAQ ── */
+    .faq-item { margin-bottom: 20px; }
+    .faq-q { color: var(--teal); font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+    .faq-a { color: var(--gray); line-height: 1.7; font-size: 0.95rem; }
+
+    /* testimonial */
+    .testimonial-card {
+      background: var(--card); border: 1px solid rgba(10,186,181,0.2);
+      border-radius: 16px; padding: 24px 28px; margin-bottom: 16px;
+    }
+    .testimonial-quote { color: var(--white); font-style: italic; font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+    .testimonial-author { color: var(--teal); font-weight: 700; font-size: 0.9rem; }
+
+    /* responsive */
+    @media(max-width: 600px) {
+      .slide { padding: 40px 16px 60px; }
+      .tier-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <span class="nav-logo-icon">🪙</span>
+    <span class="nav-logo-text">CitaCoin</span>
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+  </div>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<!-- SLIDES -->
+<div class="slides-container" id="slides-container">
+
+  <!-- SLIDE 01 — COVER -->
+  <section class="slide cover-hero" id="slide-1" data-slide="1">
+    <div class="coin-hero">🪙</div>
+    <h1 class="lang-en">CitaCoin</h1>
+    <h1 class="lang-es" style="display:none">CitaCoin</h1>
+    <p class="tagline lang-en">Your Loyalty Currency</p>
+    <p class="tagline lang-es" style="display:none">Tu Moneda de Lealtad</p>
+    <p class="slide-body lang-en" style="max-width:540px;margin:0 auto">Built into CitaPros — the platform that works as hard as you do.</p>
+    <p class="slide-body lang-es" style="display:none;max-width:540px;margin:0 auto">Integrado en CitaPros — la plataforma que trabaja tan duro como tú.</p>
+    <p class="url">citacoin.com</p>
+    <div class="speaker-note lang-en">Welcome to CitaCoin — the loyalty rewards currency built right into CitaPros. If you're already on the platform doing jobs, billing clients, and building your business — you're already earning.</div>
+    <div class="speaker-note lang-es" style="display:none">Bienvenido a CitaCoin — la moneda de recompensas de lealtad integrada en CitaPros. Si ya estás en la plataforma haciendo trabajos, facturando clientes y construyendo tu negocio — ya estás ganando.</div>
+  </section>
+
+  <!-- SLIDE 02 — WHAT IS CITACOIN -->
+  <section class="slide" id="slide-2" data-slide="2">
+    <div class="slide-number">02</div>
+    <h2 class="slide-title lang-en">What is CitaCoin?</h2>
+    <h2 class="slide-title lang-es" style="display:none">¿Qué es CitaCoin?</h2>
+    <div class="slide-body lang-en">
+      <p>CitaCoin is <strong>NOT crypto</strong>. It's not a scam. It's not complicated.</p>
+      <p>It's your <strong>loyalty rewards currency</strong> — earned by doing what you already do:</p>
+      <ul>
+        <li>🪙 <strong>Work your jobs</strong> → earn coins automatically</li>
+        <li>🔒 <strong>Stay on CitaPros</strong> → your coins build your moat</li>
+        <li>💵 <strong>Refer other pros</strong> → turn coins into real cash</li>
+      </ul>
+      <p><em>Think of it like airline miles — but for tradespeople who actually work.</em></p>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <p>CitaCoin <strong>NO es criptomoneda</strong>. No es una estafa. No es complicado.</p>
+      <p>Es tu <strong>moneda de recompensas de lealtad</strong> — ganada por hacer lo que ya haces:</p>
+      <ul>
+        <li>🪙 <strong>Trabaja tus empleos</strong> → gana monedas automáticamente</li>
+        <li>🔒 <strong>Permanece en CitaPros</strong> → tus monedas construyen tu ventaja</li>
+        <li>💵 <strong>Refiere a otros profesionales</strong> → convierte monedas en dinero real</li>
+      </ul>
+      <p><em>Piénsalo como millas de aerolínea — pero para técnicos que realmente trabajan.</em></p>
+    </div>
+    <div class="speaker-note lang-en">Let's clear the air immediately. CitaCoin is NOT cryptocurrency. You don't need a wallet, you don't need to understand blockchain, and you don't need to invest a single dollar.</div>
+    <div class="speaker-note lang-es" style="display:none">Aclaremos de inmediato. CitaCoin NO es criptomoneda. No necesitas una billetera, no necesitas entender blockchain y no necesitas invertir un solo dólar.</div>
+  </section>
+
+  <!-- SLIDE 03 — HOW YOU EARN -->
+  <section class="slide" id="slide-3" data-slide="3">
+    <div class="slide-number">03</div>
+    <h2 class="slide-title lang-en">How You Earn CitaCoins</h2>
+    <h2 class="slide-title lang-es" style="display:none">Cómo Ganas CitaCoins</h2>
+    <div class="slide-body lang-en">
+      <p>Every action on CitaPros is an opportunity:</p>
+      <table>
+        <thead><tr><th>Action</th><th>Coins Earned</th></tr></thead>
+        <tbody>
+          <tr><td>✅ Complete a job</td><td><strong>+10 coins</strong></td></tr>
+          <tr><td>⭐ Receive a 5-star rating</td><td><strong>+5 bonus coins</strong> (max 3x/month)</td></tr>
+          <tr><td>🔄 30-day work streak</td><td><strong>+20 coins</strong> (1+ job/week for 4 weeks)</td></tr>
+          <tr><td>👥 Refer a new paying subscriber</td><td><strong>+100 coins</strong> (released after 30 days)</td></tr>
+          <tr><td>🏆 Hit affiliate milestones</td><td><strong>+500–2,000 coins</strong></td></tr>
+        </tbody>
+      </table>
+      <p><em>Coins accumulate automatically. No extra steps. Just do your work.</em></p>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <p>Cada acción en CitaPros es una oportunidad:</p>
+      <table>
+        <thead><tr><th>Acción</th><th>Monedas Ganadas</th></tr></thead>
+        <tbody>
+          <tr><td>✅ Completa un trabajo</td><td><strong>+10 monedas</strong></td></tr>
+          <tr><td>⭐ Recibe una calificación de 5 estrellas</td><td><strong>+5 monedas extra</strong> (máx 3x/mes)</td></tr>
+          <tr><td>🔄 Racha de 30 días de trabajo</td><td><strong>+20 monedas</strong> (1+ trabajo/semana por 4 semanas)</td></tr>
+          <tr><td>👥 Refiere a un nuevo suscriptor</td><td><strong>+100 monedas</strong> (liberadas después de 30 días)</td></tr>
+          <tr><td>🏆 Alcanza hitos de afiliado</td><td><strong>+500–2,000 monedas</strong></td></tr>
+        </tbody>
+      </table>
+      <p><em>Las monedas se acumulan automáticamente. Sin pasos extra. Solo haz tu trabajo.</em></p>
+    </div>
+    <div class="speaker-note lang-en">Here's the simple truth about earning: CitaCoin rewards you for being a good operator. Complete jobs — earn coins. Get great reviews — earn more. Show up consistently every week — earn a streak bonus.</div>
+    <div class="speaker-note lang-es" style="display:none">La verdad simple sobre ganar: CitaCoin te recompensa por ser un buen operador. Completa trabajos — gana monedas. Obtén excelentes reseñas — gana más.</div>
+  </section>
+
+  <!-- SLIDE 04 — HOW YOU SPEND -->
+  <section class="slide" id="slide-4" data-slide="4">
+    <div class="slide-number">04</div>
+    <h2 class="slide-title lang-en">How You Spend CitaCoins</h2>
+    <h2 class="slide-title lang-es" style="display:none">Cómo Gastas CitaCoins</h2>
+    <div class="slide-body lang-en">
+      <p>Your coins are real value. Here's what they unlock:</p>
+      <table>
+        <thead><tr><th>Coins</th><th>What You Get</th></tr></thead>
+        <tbody>
+          <tr><td>🪙 <strong>100 coins</strong></td><td>$1 credit toward your CitaPros plan</td></tr>
+          <tr><td>📢 <strong>500 coins</strong></td><td>CitaCentral listing boost — get seen first</td></tr>
+          <tr><td>🤝 <strong>1,000 coins</strong></td><td>10% off hiring another operator through CitaPros</td></tr>
+          <tr><td>📦 <strong>5,000 coins</strong></td><td>Premium template pack — invoices, proposals, contracts</td></tr>
+        </tbody>
+      </table>
+      <p><em>The more you earn, the more you save. It compounds.</em></p>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <p>Tus monedas son valor real. Esto es lo que desbloquean:</p>
+      <table>
+        <thead><tr><th>Monedas</th><th>Lo Que Obtienes</th></tr></thead>
+        <tbody>
+          <tr><td>🪙 <strong>100 monedas</strong></td><td>$1 de crédito en tu plan CitaPros</td></tr>
+          <tr><td>📢 <strong>500 monedas</strong></td><td>Impulso en el listado de CitaCentral</td></tr>
+          <tr><td>🤝 <strong>1,000 monedas</strong></td><td>10% de descuento al contratar a otro operador</td></tr>
+          <tr><td>📦 <strong>5,000 monedas</strong></td><td>Pack de plantillas premium — facturas, propuestas, contratos</td></tr>
+        </tbody>
+      </table>
+      <p><em>Cuanto más ganas, más ahorras. Se multiplica.</em></p>
+    </div>
+    <div class="speaker-note lang-en">Coins aren't just points sitting in an account. They're spendable currency. The most direct value: every 100 coins cuts a dollar off your monthly bill.</div>
+    <div class="speaker-note lang-es" style="display:none">Las monedas no son solo puntos en una cuenta. Son moneda gastable. El valor más directo: cada 100 monedas reduce un dólar de tu factura mensual.</div>
+  </section>
+
+  <!-- SLIDE 05 — THE REFERRAL PROGRAM -->
+  <section class="slide" id="slide-5" data-slide="5">
+    <div class="slide-number">05</div>
+    <h2 class="slide-title lang-en">The Referral Program</h2>
+    <h2 class="slide-title lang-es" style="display:none">El Programa de Referencias</h2>
+    <p class="slide-subtitle lang-en">How One Conversation Becomes Recurring Income</p>
+    <p class="slide-subtitle lang-es" style="display:none">Cómo Una Conversación Se Convierte en Ingresos Recurrentes</p>
+    <div class="slide-body lang-en">
+      <ul>
+        <li><strong>1</strong> — Share your referral link with another tradesperson</li>
+        <li><strong>2</strong> — They sign up for CitaPros and start paying</li>
+        <li><strong>3</strong> — You earn <em>100 coins</em> immediately (vested after 30 days)</li>
+        <li><strong>4</strong> — As you refer more, unlock the CitaPartners cash tiers</li>
+        <li><strong>5</strong> — Cash payments deposit monthly — automatically</li>
+      </ul>
+      <p style="margin-top:20px">There's no cap. The more pros you bring in, the more you make.</p>
+      <blockquote>💡 Your link is in your CitaPros dashboard. It takes 30 seconds to share.</blockquote>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <ul>
+        <li><strong>1</strong> — Comparte tu enlace de referencia con otro técnico</li>
+        <li><strong>2</strong> — Ellos se registran en CitaPros y comienzan a pagar</li>
+        <li><strong>3</strong> — Ganas <em>100 monedas</em> inmediatamente (liberadas después de 30 días)</li>
+        <li><strong>4</strong> — A medida que refieras más, desbloqueas los niveles de efectivo</li>
+        <li><strong>5</strong> — Los pagos en efectivo se depositan mensualmente — automáticamente</li>
+      </ul>
+      <p style="margin-top:20px">No hay límite. Cuantos más profesionales traigas, más ganas.</p>
+      <blockquote>💡 Tu enlace está en tu panel de CitaPros. Tarda 30 segundos en compartirlo.</blockquote>
+    </div>
+    <div class="speaker-note lang-en">This is where CitaCoin gets seriously powerful. Your referral link turns every conversation with another tradesperson into a potential income stream.</div>
+    <div class="speaker-note lang-es" style="display:none">Aquí es donde CitaCoin se vuelve muy poderoso. Tu enlace de referencia convierte cada conversación con otro técnico en un flujo de ingresos potencial.</div>
+  </section>
+
+  <!-- SLIDE 06 — THE TIERS -->
+  <section class="slide" id="slide-6" data-slide="6">
+    <div class="slide-number">06</div>
+    <h2 class="slide-title lang-en">CitaPartners Tiers</h2>
+    <h2 class="slide-title lang-es" style="display:none">Niveles de CitaPartners</h2>
+    <p class="slide-subtitle lang-en">The More You Refer, The More You Earn</p>
+    <p class="slide-subtitle lang-es" style="display:none">Cuanto Más Refieres, Más Ganas</p>
+    <div class="slide-body">
+      <div class="tier-grid">
+        <div class="tier-card">
+          <div class="tier-icon">🔭</div>
+          <div class="tier-name">Scout</div>
+          <div class="tier-refs lang-en">1–4 referrals</div>
+          <div class="tier-refs lang-es" style="display:none">1–4 referencias</div>
+          <div class="tier-pay lang-en">Coins only</div>
+          <div class="tier-pay lang-es" style="display:none">Solo monedas</div>
+        </div>
+        <div class="tier-card" style="border-color:rgba(10,186,181,0.3)">
+          <div class="tier-icon">🔨</div>
+          <div class="tier-name">Builder</div>
+          <div class="tier-refs lang-en">5–9 referrals</div>
+          <div class="tier-refs lang-es" style="display:none">5–9 referencias</div>
+          <div class="tier-pay">$5/mo each</div>
+        </div>
+        <div class="tier-card" style="border-color:rgba(212,168,58,0.3)">
+          <div class="tier-icon">🤝</div>
+          <div class="tier-name">Partner</div>
+          <div class="tier-refs lang-en">10–24 referrals</div>
+          <div class="tier-refs lang-es" style="display:none">10–24 referencias</div>
+          <div class="tier-pay">$10/mo each</div>
+        </div>
+        <div class="tier-card" style="border-color:rgba(212,168,58,0.5)">
+          <div class="tier-icon">⚡</div>
+          <div class="tier-name">Elite</div>
+          <div class="tier-refs lang-en">25–49 referrals</div>
+          <div class="tier-refs lang-es" style="display:none">25–49 referencias</div>
+          <div class="tier-pay">$15/mo each</div>
+        </div>
+        <div class="tier-card" style="border-color:rgba(245,204,90,0.6);background:rgba(212,168,58,0.06)">
+          <div class="tier-icon">🏆</div>
+          <div class="tier-name">Ambassador</div>
+          <div class="tier-refs lang-en">50–100 referrals</div>
+          <div class="tier-refs lang-es" style="display:none">50–100 referencias</div>
+          <div class="tier-pay">$20/mo each</div>
+        </div>
+      </div>
+      <div class="highlight-card">
+        <div class="amount">$1,000<span style="font-size:1.5rem">/mo</span></div>
+        <div class="label lang-en">At Ambassador with 50 referrals — recurring, passive income</div>
+        <div class="label lang-es" style="display:none">En Ambassador con 50 referencias — ingreso pasivo recurrente</div>
+      </div>
+    </div>
+    <div class="speaker-note lang-en">Five tiers. Each one pays more per referral per month. Scout is where you start — coins for your first few. But once you hit five active subscribers, you cross into Builder and start seeing real cash deposits.</div>
+    <div class="speaker-note lang-es" style="display:none">Cinco niveles. Cada uno paga más por referencia por mes. Scout es donde comienzas — monedas para tus primeras referencias. Pero una vez que alcances cinco suscriptores activos, cruzas a Builder.</div>
+  </section>
+
+  <!-- SLIDE 07 — REAL MATH -->
+  <section class="slide" id="slide-7" data-slide="7">
+    <div class="slide-number">07</div>
+    <h2 class="slide-title lang-en">Let's Do the Math</h2>
+    <h2 class="slide-title lang-es" style="display:none">Hagamos Los Números</h2>
+    <p class="slide-subtitle lang-en">Real Numbers. Real Money.</p>
+    <p class="slide-subtitle lang-es" style="display:none">Cifras Reales. Dinero Real.</p>
+    <div class="slide-body">
+      <pre class="lang-en">10 active referrals
+→ Partner tier ($10/mo per referral)
+→ 10 × $10 = $100/month
+→ $1,200/year — passive</pre>
+      <pre class="lang-es" style="display:none">10 referencias activas
+→ Nivel Partner ($10/mes por referencia)
+→ 10 × $10 = $100/mes
+→ $1,200/año — pasivo</pre>
+      <pre class="lang-en">25 active referrals
+→ Elite tier ($15/mo per referral)
+→ 25 × $15 = $375/month
+→ $4,500/year — passive</pre>
+      <pre class="lang-es" style="display:none">25 referencias activas
+→ Nivel Elite ($15/mes por referencia)
+→ 25 × $15 = $375/mes
+→ $4,500/año — pasivo</pre>
+      <div class="highlight-card">
+        <div class="amount">$12,000<span style="font-size:1.5rem">/yr</span></div>
+        <div class="label lang-en">Ambassador (50 referrals) → $1,000/month passive. That's income that shows up whether you're on a job or not.</div>
+        <div class="label lang-es" style="display:none">Ambassador (50 referencias) → $1,000/mes pasivo. Estos son ingresos que llegan ya sea que estés en un trabajo o no.</div>
+      </div>
+    </div>
+    <div class="speaker-note lang-en">Let's make this concrete. Ten referrals — that's ten people in your trade network, your crew, guys from a union hall — ten people puts you at $100 a month. That's your truck insurance.</div>
+    <div class="speaker-note lang-es" style="display:none">Hagámoslo concreto. Diez referencias — eso son diez personas en tu red de oficios, tu equipo — diez personas te pone en $100 al mes. Eso es el seguro de tu camioneta.</div>
+  </section>
+
+  <!-- SLIDE 08 — WHY EARLY ADOPTERS WIN -->
+  <section class="slide" id="slide-8" data-slide="8">
+    <div class="slide-number">08</div>
+    <h2 class="slide-title lang-en">Why Early Adopters Win</h2>
+    <h2 class="slide-title lang-es" style="display:none">Por Qué Ganan los Primeros</h2>
+    <p class="slide-subtitle lang-en">The Moat Builds Itself — If You Start Now</p>
+    <p class="slide-subtitle lang-es" style="display:none">La Ventaja Se Construye Sola — Si Empiezas Ahora</p>
+    <div class="slide-body lang-en">
+      <ul>
+        <li>🔒 <strong>Locked-in Rates</strong> — Founders get pricing <em>guaranteed for life</em> while active</li>
+        <li>📈 <strong>Coin Head Start</strong> — Every job today builds a balance latecomers can't catch</li>
+        <li>🏃 <strong>Referral First-Mover</strong> — If someone else refers them first, that income goes to them, not you</li>
+        <li>⚡ <strong>Tier Velocity</strong> — Reach Builder faster → recurring cash starts sooner</li>
+      </ul>
+      <blockquote>⚡ Every week you wait is a week someone else is building their moat.</blockquote>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <ul>
+        <li>🔒 <strong>Tarifas Bloqueadas</strong> — Los fundadores tienen precios <em>garantizados de por vida</em></li>
+        <li>📈 <strong>Ventaja Inicial</strong> — Cada trabajo hoy construye un saldo que los nuevos no pueden alcanzar</li>
+        <li>🏃 <strong>Primer Movimiento</strong> — Si alguien más los refiere primero, ese ingreso va para ellos</li>
+        <li>⚡ <strong>Velocidad de Nivel</strong> — Llega a Builder más rápido → el efectivo recurrente llega antes</li>
+      </ul>
+      <blockquote>⚡ Cada semana que esperas es una semana que alguien más está construyendo su ventaja.</blockquote>
+    </div>
+    <div class="speaker-note lang-en">Here's the honest truth about timing: this is a first-mover opportunity. The operators who join now lock in pricing that latecomers won't have access to.</div>
+    <div class="speaker-note lang-es" style="display:none">La verdad honesta sobre el tiempo: esta es una oportunidad de primer movimiento. Los operadores que se unan ahora bloquean precios que los rezagados no tendrán.</div>
+  </section>
+
+  <!-- SLIDE 09 — THE MOAT -->
+  <section class="slide" id="slide-9" data-slide="9">
+    <div class="slide-number">09</div>
+    <h2 class="slide-title lang-en">The Moat</h2>
+    <h2 class="slide-title lang-es" style="display:none">La Ventaja Defensiva</h2>
+    <p class="slide-subtitle lang-en">Why Operators With Coins Don't Leave</p>
+    <p class="slide-subtitle lang-es" style="display:none">Por Qué Los Operadores Con Monedas No Se Van</p>
+    <div class="slide-body lang-en">
+      <ul>
+        <li>💰 <strong>Your coin balance has real dollar value</strong> — walking away means leaving money on the table</li>
+        <li>📈 <strong>Your referral income stops the moment you cancel</strong> — that recurring cash disappears</li>
+        <li>🔒 <strong>Your Founder rate disappears</strong> — you can't get it back at a higher price point</li>
+        <li>🏆 <strong>Your tier status resets</strong> — starting over means years of lost momentum</li>
+        <li>📋 <strong>Your data, history, and templates live here</strong> — migration is friction</li>
+      </ul>
+      <blockquote>This isn't lock-in as punishment. It's loyalty rewarded.</blockquote>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <ul>
+        <li>💰 <strong>Tu saldo de monedas tiene valor real</strong> — irte significa dejar dinero sobre la mesa</li>
+        <li>📈 <strong>Tus ingresos por referencias se detienen al cancelar</strong> — ese efectivo recurrente desaparece</li>
+        <li>🔒 <strong>Tu tarifa de Fundador desaparece</strong> — no puedes recuperarla a precio más alto</li>
+        <li>🏆 <strong>Tu estado de nivel se reinicia</strong> — empezar de nuevo significa años de impulso perdido</li>
+        <li>📋 <strong>Tus datos y plantillas viven aquí</strong> — la migración es fricción</li>
+      </ul>
+      <blockquote>Esto no es retención como castigo. Es lealtad recompensada.</blockquote>
+    </div>
+    <div class="speaker-note lang-en">Once you've built a coin balance, unlocked a Partner or Elite tier, and have recurring referral checks — what does leaving actually cost you? Everything.</div>
+    <div class="speaker-note lang-es" style="display:none">Una vez que hayas construido un saldo de monedas, desbloqueado un nivel Partner o Elite — ¿qué te cuesta irte? Todo.</div>
+  </section>
+
+  <!-- SLIDE 10 — HOW TO START -->
+  <section class="slide" id="slide-10" data-slide="10">
+    <div class="slide-number">10</div>
+    <h2 class="slide-title lang-en">How To Start Earning</h2>
+    <h2 class="slide-title lang-es" style="display:none">Cómo Empezar a Ganar</h2>
+    <p class="slide-subtitle lang-en">Three steps. Five minutes. That's it.</p>
+    <p class="slide-subtitle lang-es" style="display:none">Tres pasos. Cinco minutos. Eso es todo.</p>
+    <div class="slide-body lang-en">
+      <ul>
+        <li>
+          <strong>1 — Activate Your Account</strong><br>
+          Log into CitaPros. Your CitaCoin wallet is already there. No setup required.
+        </li>
+        <li style="margin-top:12px">
+          <strong>2 — Complete Your First Job</strong><br>
+          Send an invoice through CitaPros. When the job is marked complete — your first coins appear automatically.
+        </li>
+        <li style="margin-top:12px">
+          <strong>3 — Share Your Referral Link</strong><br>
+          Find your unique link in your dashboard. Send it to one tradesperson you know.
+        </li>
+      </ul>
+      <blockquote>🚀 Your coin balance starts at zero. The only way to change that is to begin.</blockquote>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <ul>
+        <li>
+          <strong>1 — Activa Tu Cuenta</strong><br>
+          Inicia sesión en CitaPros. Tu billetera CitaCoin ya está ahí. No se requiere configuración.
+        </li>
+        <li style="margin-top:12px">
+          <strong>2 — Completa Tu Primer Trabajo</strong><br>
+          Envía una factura a través de CitaPros. Cuando el trabajo esté marcado como completo — tus primeras monedas aparecen automáticamente.
+        </li>
+        <li style="margin-top:12px">
+          <strong>3 — Comparte Tu Enlace de Referencia</strong><br>
+          Encuentra tu enlace único en tu panel. Envíaselo a un técnico que conozcas.
+        </li>
+      </ul>
+      <blockquote>🚀 Tu saldo de monedas comienza en cero. La única manera de cambiarlo es empezar.</blockquote>
+    </div>
+    <div class="speaker-note lang-en">Don't overthink this. You don't need to sign up for anything new. You don't need to download another app. Log in, do a job, share your link.</div>
+    <div class="speaker-note lang-es" style="display:none">No lo pienses demasiado. No necesitas registrarte en nada nuevo. No necesitas descargar otra aplicación. Inicia sesión, haz un trabajo, comparte tu enlace.</div>
+  </section>
+
+  <!-- SLIDE 11 — FAQ -->
+  <section class="slide" id="slide-11" data-slide="11">
+    <div class="slide-number">11</div>
+    <h2 class="slide-title lang-en">Frequently Asked Questions</h2>
+    <h2 class="slide-title lang-es" style="display:none">Preguntas Frecuentes</h2>
+    <div class="slide-body lang-en">
+      <div class="faq-item"><p class="faq-q">Q: Is CitaCoin a cryptocurrency?</p><p class="faq-a">No. CitaCoin is a loyalty rewards currency that only exists within the CitaPros platform. It's more like airline miles than Bitcoin.</p></div>
+      <div class="faq-item"><p class="faq-q">Q: Do my coins expire?</p><p class="faq-a">No — as long as your CitaPros account is active, your coins never expire.</p></div>
+      <div class="faq-item"><p class="faq-q">Q: When do I receive my referral commission?</p><p class="faq-a">Referral coins are held for 30 days to confirm the subscriber remains active, then released automatically. Cash tier payouts are issued monthly.</p></div>
+      <div class="faq-item"><p class="faq-q">Q: What happens to my coins if I cancel?</p><p class="faq-a">Your coins are tied to your active account. Canceling forfeits your balance, your locked-in rate, and your referral tier status.</p></div>
+      <div class="faq-item"><p class="faq-q">Q: Can I refer someone who already uses CitaPros?</p><p class="faq-a">No — the referral program only applies to new subscribers who haven't used CitaPros before.</p></div>
+    </div>
+    <div class="slide-body lang-es" style="display:none">
+      <div class="faq-item"><p class="faq-q">P: ¿Es CitaCoin una criptomoneda?</p><p class="faq-a">No. CitaCoin es una moneda de recompensas de lealtad que solo existe dentro de la plataforma CitaPros. Es más como millas de aerolínea que Bitcoin.</p></div>
+      <div class="faq-item"><p class="faq-q">P: ¿Mis monedas vencen?</p><p class="faq-a">No — mientras tu cuenta de CitaPros esté activa, tus monedas nunca vencen.</p></div>
+      <div class="faq-item"><p class="faq-q">P: ¿Cuándo recibo mi comisión de referencia?</p><p class="faq-a">Las monedas de referencia se retienen durante 30 días para confirmar que el suscriptor permanece activo, luego se liberan automáticamente.</p></div>
+      <div class="faq-item"><p class="faq-q">P: ¿Qué pasa con mis monedas si cancelo?</p><p class="faq-a">Tus monedas están vinculadas a tu cuenta activa. Cancelar implica perder tu saldo, tu tarifa bloqueada y el estado de tu nivel.</p></div>
+      <div class="faq-item"><p class="faq-q">P: ¿Puedo referir a alguien que ya usa CitaPros?</p><p class="faq-a">No — el programa de referencias solo aplica a nuevos suscriptores que no hayan usado CitaPros antes.</p></div>
+    </div>
+    <div class="speaker-note lang-en">Let's answer the questions you're probably already thinking about. The big one first — CitaCoin is not crypto. No wallets, no volatility, no risk. It's loyalty currency, full stop.</div>
+    <div class="speaker-note lang-es" style="display:none">Respondamos las preguntas que probablemente ya estás pensando. La primera grande — CitaCoin no es cripto. Sin billeteras, sin volatilidad, sin riesgo.</div>
+  </section>
+
+  <!-- SLIDE 12 — CTA -->
+  <section class="slide cta-slide" id="slide-12" data-slide="12">
+    <div class="slide-number" style="margin:0 auto 20px">12</div>
+    <div class="coin-hero" style="font-size:4rem;margin-bottom:16px">🪙</div>
+    <h2 class="slide-title lang-en" style="font-size:clamp(2.2rem,6vw,4rem)">Ready to Claim Your Coins?</h2>
+    <h2 class="slide-title lang-es" style="display:none;font-size:clamp(2.2rem,6vw,4rem)">¿Listo Para Reclamar Tus Monedas?</h2>
+    <div class="slide-body lang-en" style="max-width:560px;margin:0 auto">
+      <p>You've seen how it works.<br>You've done the math.<br>Now it's your move.</p>
+      <blockquote style="margin:24px 0">"The operators who start today are building something that compounds. The ones who wait are watching someone else build it."</blockquote>
+    </div>
+    <div class="slide-body lang-es" style="display:none;max-width:560px;margin:0 auto">
+      <p>Has visto cómo funciona.<br>Has hecho los números.<br>Ahora es tu turno.</p>
+      <blockquote style="margin:24px 0">"Los operadores que empiezan hoy están construyendo algo que se multiplica. Los que esperan están viendo a otro construirlo."</blockquote>
+    </div>
+    <a href="https://citapros.com" class="cta-btn lang-en">Claim Your Founder Status →</a>
+    <a href="https://citapros.com" class="cta-btn lang-es" style="display:none">Reclama Tu Estatus de Fundador →</a>
+    <p style="color:var(--gray);font-size:0.9rem;margin-top:16px" class="lang-en">Already on CitaPros? Your wallet is waiting — log in and check your balance.</p>
+    <p style="color:var(--gray);font-size:0.9rem;margin-top:16px;display:none" class="lang-es">¿Ya estás en CitaPros? Tu billetera te espera — inicia sesión y revisa tu saldo.</p>
+    <p style="margin-top:12px"><strong style="color:var(--teal)">citacoin.com</strong></p>
+  </section>
+
+  <!-- BONUS — TESTIMONIALS -->
+  <section class="slide" id="slide-13" data-slide="13">
+    <div class="slide-number">★</div>
+    <h2 class="slide-title lang-en">What Operators Are Saying</h2>
+    <h2 class="slide-title lang-es" style="display:none">Lo Que Dicen Los Operadores</h2>
+    <div class="slide-body">
+      <div class="testimonial-card">
+        <p class="testimonial-quote lang-en">"I referred 12 guys from my HVAC network in two months. Now I'm at Partner tier making $120 a month just for telling people about the app I already use."</p>
+        <p class="testimonial-quote lang-es" style="display:none">"Referí a 12 personas de mi red de HVAC en dos meses. Ahora estoy en nivel Partner ganando $120 al mes solo por hablarle a la gente de la app que ya uso."</p>
+        <p class="testimonial-author">— Marcus T., HVAC Tech, Dallas TX</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote lang-en">"I didn't believe it at first. Then I checked my dashboard and had 340 coins just from doing jobs I was already doing. Applied it to my bill. Done."</p>
+        <p class="testimonial-quote lang-es" style="display:none">"Al principio no lo creía. Luego revisé mi panel y tenía 340 monedas solo por hacer trabajos que ya estaba haciendo. Lo apliqué a mi factura. Listo."</p>
+        <p class="testimonial-author">— Rosa M., Electrician, San Antonio TX</p>
+      </div>
+    </div>
+    <div class="speaker-note lang-en">Real words from real operators. Nobody changed their workflow. They just started paying attention to what was already there. That's CitaCoin.</div>
+    <div class="speaker-note lang-es" style="display:none">Palabras reales de operadores reales. Nadie cambió su flujo de trabajo. Solo empezaron a prestar atención a lo que ya estaba ahí.</div>
+  </section>
+
+</div><!-- /slides-container -->
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn" id="btn-prev" onclick="navSlide(-1)" disabled>← Prev</button>
+  <span class="slide-counter" id="slide-counter">1 / 13</span>
+  <button class="nav-btn primary" id="btn-next" onclick="navSlide(1)">Next →</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CITACOIN CHAT WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<style>
+  #cita-chat-bubble {
+    position: fixed; bottom: 76px; right: 20px; z-index: 9999;
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #D4A83A, #b8860b);
+    color: #000; padding: 10px 18px; border-radius: 50px;
+    cursor: pointer; font-family: 'Plus Jakarta Sans', Inter, sans-serif;
+    font-weight: 800; font-size: 0.9rem;
+    box-shadow: 0 4px 24px rgba(212,168,58,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+  }
+  #cita-chat-bubble:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(212,168,58,0.6); }
+  #cita-chat-bubble .cita-bubble-icon { font-size: 1.1rem; }
+
+  #cita-chat-panel {
+    position: fixed; bottom: 76px; right: 20px; z-index: 9998;
+    width: 340px; max-width: calc(100vw - 32px);
+    background: #0d1117; border: 1px solid rgba(10,186,181,0.3);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.7);
+    display: none; flex-direction: column;
+    transform: translateY(20px); opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  #cita-chat-panel.open { display: flex; transform: translateY(0); opacity: 1; }
+
+  .cita-panel-header {
+    background: linear-gradient(135deg, #0ABAB5, #07908c);
+    padding: 16px 18px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .cita-panel-header .cita-title { color: #000; font-weight: 800; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; gap: 8px; }
+  .cita-close-btn { background: none; border: none; color: rgba(0,0,0,0.6); font-size: 1.3rem; cursor: pointer; line-height: 1; }
+
+  .cita-messages {
+    flex: 1; padding: 16px; overflow-y: auto; max-height: 280px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .cita-msg { padding: 10px 14px; border-radius: 14px; font-size: 0.875rem; line-height: 1.55; max-width: 92%; }
+  .cita-msg.bot { background: rgba(255,255,255,0.06); color: #e2e8f0; align-self: flex-start; }
+  .cita-msg.user { background: rgba(10,186,181,0.18); color: #e2e8f0; align-self: flex-end; text-align: right; border: 1px solid rgba(10,186,181,0.3); }
+
+  .cita-quick-replies { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 7px; }
+  .cita-qr-btn {
+    background: rgba(212,168,58,0.1); border: 1px solid rgba(212,168,58,0.35);
+    color: #f5cc5a; padding: 9px 14px; border-radius: 10px;
+    font-size: 0.8rem; font-family: inherit; cursor: pointer;
+    text-align: left; transition: background 0.15s;
+    line-height: 1.3;
+  }
+  .cita-qr-btn:hover { background: rgba(212,168,58,0.2); }
+
+  .cita-input-row {
+    display: flex; gap: 8px; padding: 12px 14px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+  }
+  .cita-input {
+    flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 0.85rem; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .cita-input:focus { border-color: rgba(10,186,181,0.5); }
+  .cita-input::placeholder { color: rgba(255,255,255,0.3); }
+  .cita-send-btn {
+    background: var(--teal, #0ABAB5); border: none; border-radius: 10px;
+    color: #000; font-weight: 700; font-size: 0.8rem; padding: 9px 14px;
+    cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+  }
+  .cita-send-btn:hover { opacity: 0.85; }
+</style>
+
+<div id="cita-chat-bubble" onclick="citaToggleChat()">
+  <span class="cita-bubble-icon">🪙</span>
+  <span>Ask CitaCoin</span>
+</div>
+
+<div id="cita-chat-panel">
+  <div class="cita-panel-header">
+    <div class="cita-title"><span>🪙</span> CitaCoin Assistant</div>
+    <button class="cita-close-btn" onclick="citaToggleChat()" title="Close">✕</button>
+  </div>
+  <div class="cita-messages" id="cita-messages">
+    <div class="cita-msg bot" id="cita-welcome">
+      Hey! I'm the CitaCoin assistant. Ask me anything or tap a quick question below. 🪙
+    </div>
+  </div>
+  <div class="cita-quick-replies" id="cita-quick-replies">
+    <button class="cita-qr-btn" onclick="citaQuickReply('earn')">How do I earn coins? / ¿Cómo gano monedas?</button>
+    <button class="cita-qr-btn" onclick="citaQuickReply('referral')">How does referral pay work? / ¿Cómo funciona el bono?</button>
+    <button class="cita-qr-btn" onclick="citaQuickReply('early')">Am I too late to be an early adopter? / ¿Soy adoptador temprano?</button>
+  </div>
+  <div class="cita-input-row">
+    <input class="cita-input" id="cita-input" type="text" placeholder="Ask a question..." onkeydown="if(event.key==='Enter')citaSend()">
+    <button class="cita-send-btn" onclick="citaSend()">Send</button>
+  </div>
+</div>
+
+<script>
+// ── SLIDE NAVIGATION ──
+var TOTAL_SLIDES = 13;
+var currentSlide = 1;
+
+function getCurrentLang() {
+  return localStorage.getItem('cita_lang') || 'en';
+}
+
+function updateProgress() {
+  var pct = ((currentSlide - 1) / (TOTAL_SLIDES - 1)) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('slide-counter').textContent = currentSlide + ' / ' + TOTAL_SLIDES;
+  document.getElementById('btn-prev').disabled = currentSlide <= 1;
+  document.getElementById('btn-next').disabled = currentSlide >= TOTAL_SLIDES;
+}
+
+function navSlide(dir) {
+  var next = currentSlide + dir;
+  if (next < 1 || next > TOTAL_SLIDES) return;
+  currentSlide = next;
+  var el = document.getElementById('slide-' + currentSlide);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  updateProgress();
+}
+
+// Update current slide based on scroll position
+var slides = document.querySelectorAll('[data-slide]');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      currentSlide = parseInt(entry.target.getAttribute('data-slide'));
+      updateProgress();
+    }
+  });
+}, { threshold: 0.4 });
+slides.forEach(function(s) { observer.observe(s); });
+
+// ── LANGUAGE TOGGLE ──
+function setLang(lang) {
+  localStorage.setItem('cita_lang', lang);
+  document.querySelectorAll('.lang-en').forEach(function(el) {
+    el.style.display = lang === 'en' ? '' : 'none';
+  });
+  document.querySelectorAll('.lang-es').forEach(function(el) {
+    el.style.display = lang === 'es' ? '' : 'none';
+  });
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.querySelector('.cita-input').placeholder = lang === 'es' ? 'Haz una pregunta...' : 'Ask a question...';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('cita_lang');
+  var auto = navigator.language && navigator.language.toLowerCase().startsWith('es') ? 'es' : 'en';
+  setLang(saved || auto);
+  updateProgress();
+});
+
+// ── CHAT WIDGET ──
+var citaOpen = false;
+
+function citaToggleChat() {
+  citaOpen = !citaOpen;
+  var panel = document.getElementById('cita-chat-panel');
+  if (citaOpen) {
+    panel.style.display = 'flex';
+    setTimeout(function() { panel.classList.add('open'); }, 10);
+  } else {
+    panel.classList.remove('open');
+    setTimeout(function() { panel.style.display = 'none'; }, 260);
+  }
+}
+
+function citaAddMsg(text, type) {
+  var msgs = document.getElementById('cita-messages');
+  var div = document.createElement('div');
+  div.className = 'cita-msg ' + type;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+var citaAnswers = {
+  earn: {
+    en: "Every job you complete in CitaPros earns you 10 coins. Get a 5-star rating? +5 more. Complete 1 job per week for 4 straight weeks and earn a 20-coin streak bonus. You can earn up to 500 coins/month — and spend them for plan credits, listing boosts, and more.",
+    es: "Cada trabajo que completes en CitaPros te da 10 monedas. ¿Recibes 5 estrellas? +5 más. Completa 1 trabajo por semana durante 4 semanas seguidas y gana un bono de racha de 20 monedas. Puedes ganar hasta 500 monedas al mes."
+  },
+  referral: {
+    en: "Refer another pro to CitaPros and earn 100 coins when they activate. Keep referring and you unlock cash override payments: 5 referrals = $25/mo, 10 = $100/mo, 25 = $375/mo, 50+ = $1,000+/mo. This is passive income for the life of their subscription.",
+    es: "Refiere a otro profesional a CitaPros y gana 100 monedas cuando activen. Sigue refiriendo y desbloqueas pagos en efectivo: 5 referidos = $25/mes, 10 = $100/mes, 25 = $375/mes, 50+ = $1,000+/mes. Ingreso pasivo de por vida."
+  },
+  early: {
+    en: "Not at all — you're early. Founder rates are still available. Early operators who refer and stay active build the biggest coin balances and earn the highest override tiers. The window won't be open forever. Start now at citapros.com.",
+    es: "Para nada — llegas temprano. Las tarifas de fundador aún están disponibles. Los operadores tempranos que refieren y se mantienen activos construyen los mayores saldos de monedas. La ventana no estará abierta para siempre."
+  }
+};
+
+function citaQuickReply(key) {
+  var lang = getCurrentLang();
+  var qLabels = {
+    earn: { en: "How do I earn coins?", es: "¿Cómo gano monedas?" },
+    referral: { en: "How does referral pay work?", es: "¿Cómo funciona el bono?" },
+    early: { en: "Am I too late to be an early adopter?", es: "¿Soy adoptador temprano?" }
+  };
+  citaAddMsg(qLabels[key][lang], 'user');
+  document.getElementById('cita-quick-replies').style.display = 'none';
+  setTimeout(function() {
+    citaAddMsg(citaAnswers[key][lang], 'bot');
+  }, 400);
+}
+
+function citaSend() {
+  var input = document.getElementById('cita-input');
+  var val = input.value.trim();
+  if (!val) return;
+  citaAddMsg(val, 'user');
+  input.value = '';
+  document.getElementById('cita-quick-replies').style.display = 'none';
+  setTimeout(function() {
+    var lang = getCurrentLang();
+    var reply = lang === 'es'
+      ? "¡Buena pregunta! Nuestro equipo dará seguimiento en 24 horas. Responde INFO al [CITACOIN_PHONE] o visita citapros.com"
+      : "Great question! Our team will follow up within 24 hours. Reply INFO to [CITACOIN_PHONE] or visit citapros.com";
+    citaAddMsg(reply, 'bot');
+  }, 500);
+}
+</script>
+
+</body>
+</html>
