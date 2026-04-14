@@ -241,6 +241,8 @@ Check your Browserslist config to be sure that your targets are set up correctly
           <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
           <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
         </div>
+      <button onclick="openLoginModal()" data-i18n="nav_login" onmouseover="this.style.background='rgba(20,184,166,0.1)'" onmouseout="this.style.background='transparent'" style="border:1px solid rgba(20,184,166,0.6);color:#14b8a6;background:transparent;padding:8px 20px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;transition:background 0.2s;">Log In</button>
+      <a href="https://citacoin-portal.pages.dev" target="_blank" rel="noopener" style="border:1px solid rgba(245,158,11,0.4);color:#f59e0b;font-size:13px;font-weight:700;padding:7px 14px;border-radius:8px;transition:all 0.2s;text-decoration:none;" onmouseover="this.style.background='rgba(245,158,11,0.1)'" onmouseout="this.style.background=''">Sign In →</a>
       <a href="#founder" class="cta-btn text-black text-sm font-bold px-4 py-2 rounded-lg">Join Free →</a>
   </div>
 </nav>
@@ -517,10 +519,9 @@ Check your Browserslist config to be sure that your targets are set up correctly
         <ul class="space-y-2.5 text-sm">
           <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+10</span><span class="text-gray-300">Complete any job</span></li>
           <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+5</span><span class="text-gray-300">Invoice paid through CitaPros</span></li>
-          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+15</span><span class="text-gray-300">5-star rating received</span></li>
-          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+250</span><span class="text-gray-300">Refer an operator who activates</span></li>
-          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+100</span><span class="text-gray-300">Referral completes first job</span></li>
-          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+50</span><span class="text-gray-300">10-job monthly streak</span></li>
+          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+5</span><span class="text-gray-300">5-star rating received (max 3/month)</span></li>
+          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+100</span><span class="text-gray-300">Refer an operator (30-day hold)</span></li>
+          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+20</span><span class="text-gray-300">30-day streak bonus</span></li>
           <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">+100</span><span class="text-gray-300">Welcome bonus (first job)</span></li>
         </ul>
       </div>
@@ -538,6 +539,8 @@ Check your Browserslist config to be sure that your targets are set up correctly
           <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">300</span><span class="text-gray-300">10 CitaDocs templates</span></li>
           <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">200</span><span class="text-gray-300">Unlock premium vertical fields</span></li>
           <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">50</span><span class="text-gray-300">Send verified client badge</span></li>
+          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">1,000</span><span class="text-gray-300">10% hiring discount on CitaCentral</span></li>
+          <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">5,000</span><span class="text-gray-300">Premium template pack</span></li>
         </ul>
       </div>
 
@@ -646,7 +649,7 @@ Check your Browserslist config to be sure that your targets are set up correctly
                   <div class="text-xs text-gray-600">from Martinez Family</div>
                 </div>
               </div>
-              <span class="text-green-400 text-sm font-bold">+15</span>
+              <span class="text-green-400 text-sm font-bold">+5</span>
             </div>
             <div class="activity-row flex items-center justify-between py-2.5">
               <div class="flex items-center gap-2.5">
@@ -656,7 +659,7 @@ Check your Browserslist config to be sure that your targets are set up correctly
                   <div class="text-xs text-gray-600">Kodi Signs activated</div>
                 </div>
               </div>
-              <span class="text-green-400 text-sm font-bold">+250</span>
+              <span class="text-green-400 text-sm font-bold">+100</span>
             </div>
           </div>
         </div>
@@ -699,11 +702,10 @@ Check your Browserslist config to be sure that your targets are set up correctly
         <tbody style="color:#cbd5e1;">
           <tr><td>Complete a job</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+10 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Per job completed in CitaPros</td></tr>
           <tr><td>Invoice paid through CitaPros</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+5 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Bonus on top of job completion</td></tr>
-          <tr><td>5-star rating received</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+15 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Quality signal, hardest to fake</td></tr>
-          <tr><td>Refer an operator (who activates)</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+250 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Viral growth engine</td></tr>
-          <tr><td>Referral completes their first job</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+100 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Rewards quality referrals</td></tr>
+          <tr><td>5-star rating received</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+5 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Quality signal, max 3 eligible per 30 days</td></tr>
+          <tr><td>Refer an operator</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+100 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Single award, 30-day hold</td></tr>
           <tr><td>First job completed (welcome bonus)</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+100 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">One-time onboarding reward</td></tr>
-          <tr><td>Monthly streak (10+ jobs/month)</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+50 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Retention mechanic</td></tr>
+          <tr><td>30-day streak bonus</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+20 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">1+ fully-invoiced job/week for 4 consecutive weeks</td></tr>
           <tr><td>Add a team member</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+25 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Expands platform stickiness</td></tr>
           <tr><td>Complete profile 100%</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+50 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">One-time</td></tr>
           <tr><td>CitaDocs: send + get signed</td><td style="text-align:right;color:#fbbf24;font-weight:700;">+10 CC</td><td class="hidden md:table-cell text-gray-500 text-xs">Drives CitaDocs adoption</td></tr>
@@ -711,7 +713,7 @@ Check your Browserslist config to be sure that your targets are set up correctly
         </tbody>
       </table>
     </div>
-    <p class="text-xs text-gray-600 mt-4 text-center">Daily earn cap: 500 CC/day per account · Prevents farming, protects coin value</p>
+    <p class="text-xs text-gray-600 mt-4 text-center">Monthly earn cap: 500 CC/month per account · Prevents farming, protects coin value</p>
   </div>
 </section>
 
@@ -931,6 +933,14 @@ var coinLang = {
     nav_earn: "Earn",
     nav_spend: "Spend",
     nav_wallet: "Wallet",
+    nav_login: "Log In",
+    modal_signin: "Sign in to your wallet",
+    modal_username: "Username or Email",
+    modal_password: "Password",
+    modal_login_btn: "Log In",
+    modal_or_signup: "or sign up",
+    modal_trade_pro: "Trade Professional",
+    modal_consumer: "Consumer / Customer",
     hero_eyebrow: "ONE MORE THING",
     hero_h1_1: "You've been working",
     hero_h1_2: "for dollars that leave.",
@@ -957,6 +967,14 @@ var coinLang = {
     nav_earn: "Ganar",
     nav_spend: "Gastar",
     nav_wallet: "Cartera",
+    nav_login: "Iniciar Sesión",
+    modal_signin: "Accede a tu cartera",
+    modal_username: "Usuario o Correo",
+    modal_password: "Contraseña",
+    modal_login_btn: "Iniciar Sesión",
+    modal_or_signup: "o regístrate",
+    modal_trade_pro: "Profesional de Campo",
+    modal_consumer: "Consumidor / Cliente",
     hero_eyebrow: "UNA COSA MÁS",
     hero_h1_1: "Has estado trabajando",
     hero_h1_2: "por dinero que se va.",
@@ -995,6 +1013,33 @@ document.addEventListener('DOMContentLoaded', function() {
   var saved = localStorage.getItem('cita_lang');
   var auto = navigator.language?.toLowerCase().startsWith('es') ? 'es' : 'en';
   setLang(saved || auto);
+});
+
+function openLoginModal() {
+  document.getElementById('loginBackdrop').style.display = 'flex';
+  document.getElementById('loginBackdrop').style.alignItems = 'center';
+  document.getElementById('loginBackdrop').style.justifyContent = 'center';
+  document.body.style.overflow = 'hidden';
+}
+function closeLoginModal() {
+  document.getElementById('loginBackdrop').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLoginModal(); });
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = this.querySelector('button[type=submit]');
+    var err = document.getElementById('loginError');
+    btn.textContent = 'Checking...';
+    btn.disabled = true;
+    setTimeout(function() {
+      btn.textContent = document.getElementById('btn-en').classList.contains('active') ? 'Log In' : 'Iniciar Sesión';
+      btn.disabled = false;
+      err.style.display = 'block';
+      err.textContent = 'Login coming soon — use the CitaPros app for now.';
+    }, 1200);
+  });
 });
 </script>
 
@@ -1172,6 +1217,34 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 })();
 </script>
+
+<!-- LOGIN MODAL -->
+<div id="loginBackdrop" onclick="if(event.target===this)closeLoginModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:9999;align-items:center;justify-content:center;">
+  <div style="max-width:440px;width:90%;background:#0f172a;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:48px 40px;position:relative;">
+    <button onclick="closeLoginModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;line-height:1;" title="Close">✕</button>
+    <div style="text-align:center;margin-bottom:4px;">
+      <span style="font-size:24px;font-weight:800;background:linear-gradient(90deg,#14b8a6,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">⚡ CitaCoin</span>
+    </div>
+    <p data-i18n="modal_signin" style="text-align:center;color:#94a3b8;margin:0 0 28px;">Sign in to your wallet</p>
+    <form id="loginForm" style="display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <label data-i18n="modal_username" style="color:#cbd5e1;font-size:13px;font-weight:600;">Username or Email</label>
+        <input type="text" autocomplete="username" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:14px;color:#fff;font-size:15px;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#14b8a6'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <label data-i18n="modal_password" style="color:#cbd5e1;font-size:13px;font-weight:600;">Password</label>
+        <input type="password" autocomplete="current-password" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:14px;color:#fff;font-size:15px;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#14b8a6'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <button type="submit" data-i18n="modal_login_btn" style="width:100%;background:#14b8a6;color:#000;font-weight:700;border:none;border-radius:10px;padding:14px;font-size:15px;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Log In</button>
+      <div id="loginError" style="display:none;color:#f87171;font-size:13px;text-align:center;"></div>
+    </form>
+    <div style="text-align:center;color:#64748b;font-size:13px;margin:24px 0 16px;">— <span data-i18n="modal_or_signup">or sign up</span> —</div>
+    <div style="display:flex;gap:12px;">
+      <button onclick="window.open('https://citapros.com','_blank')" data-i18n="modal_trade_pro" style="flex:1;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:#fff;padding:12px;border-radius:10px;font-size:13px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.09)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">Trade Professional</button>
+      <button onclick="window.open('https://citacentral.com','_blank')" data-i18n="modal_consumer" style="flex:1;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:#fff;padding:12px;border-radius:10px;font-size:13px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.09)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">Consumer / Customer</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
